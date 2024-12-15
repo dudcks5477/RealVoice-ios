@@ -1,3 +1,6 @@
+use_frameworks! :linkage => :static
+use_modular_headers!
+
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -22,6 +25,11 @@ target 'realvoice' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+
+  # Firebase 관련 라이브러리에 modular headers 설정 추가
+  pod 'Firebase/Auth', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
 
   target 'realvoiceTests' do
     inherit! :complete

@@ -5,6 +5,7 @@
 # Xcode
 #
 build/
+*.app
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -19,12 +20,14 @@ xcuserdata
 DerivedData
 *.hmap
 *.ipa
+*.xcworkspace
 *.xcuserstate
-**/.xcode.env.local
+ios/.xcode.env.local
 
 # Android/IntelliJ
 #
 build/
+*.apk
 .idea
 .gradle
 local.properties
@@ -56,7 +59,7 @@ yarn-error.log
 *.jsbundle
 
 # Ruby / CocoaPods
-**/Pods/
+/ios/Pods/
 /vendor/bundle/
 
 # Temporary files created by Metro to check the health of the file watcher
@@ -65,10 +68,9 @@ yarn-error.log
 # testing
 /coverage
 
-# Yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+.bundle
+.prettierrc.js
+.watchmanconfig
+.env
+
+google-services.json
