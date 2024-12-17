@@ -11,8 +11,6 @@ import uuid from 'react-native-uuid';
 import {UserProvider, useUser} from './src/contexts/UserContext.js';
 import SplashScreen from './src/components/SplashScreen';
 import SignUpPhoneNumberScreen from './src/screens/auth/SignUpPhoneNumberScreen.js';
-import PhoneVerificationScreen from './src/screens/auth/PhoneVerificationScreen.js';
-import MicroPhonePermissionScreen from './src/screens/auth/MicroPhonePermissionScreen.js';
 import NickNameScreen from './src/screens/auth/NickNameScreen.js';
 import VoicePermissionScreen from './src/screens/auth/VoicePermissionScreen.js';
 
@@ -78,19 +76,6 @@ const AppContent = () => {
             />
           )}
         </Stack.Screen>
-        <Stack.Screen name="PhoneVerification">
-          {props => (
-            <PhoneVerificationScreen
-              {...props}
-              userData={userData}
-              setUserData={setUserData}
-            />
-          )}
-        </Stack.Screen>
-        <Stack.Screen
-          name="MicroPhonePermission"
-          component={MicroPhonePermissionScreen}
-        />
         <Stack.Screen name="NickName">
           {props => (
             <NickNameScreen
@@ -106,7 +91,7 @@ const AppContent = () => {
         <Stack.Screen name="Main">
           {props => <MainScreen {...props} userData={userData} />}
         </Stack.Screen>
-        {/* <Stack.Screen name="Record" component={RecordScreen} />
+        <Stack.Screen name="Record" component={RecordScreen} />
         <Stack.Screen name="Recording" component={RecordingScreen} />
         <Stack.Screen name="UploadMain" component={UploadMainScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
@@ -126,7 +111,7 @@ const AppContent = () => {
         <Stack.Screen name="OtherSetting" component={OtherSettingScreen} />
         <Stack.Screen name="Help" component={HelpScreen} />
         <Stack.Screen name="HelpChoose" component={HelpChooseScreen} />
-        <Stack.Screen name="Information" component={InformationScreen} /> */}
+        <Stack.Screen name="Information" component={InformationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

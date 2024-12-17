@@ -15,6 +15,7 @@ const nickNameScreenStyle = StyleSheet.create({
     paddingHorizontal: 15,
     textAlign: 'center',
     fontSize: 40,
+    height: 70,
     backgroundColor: '#fff',
     fontWeight: 'bold',
     marginBottom: 15,

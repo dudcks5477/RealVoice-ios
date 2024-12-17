@@ -1,19 +1,13 @@
 import React, {useState, useContext} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  PermissionsAndroid,
-  Platform,
-  Alert,
-  Linking,
-} from 'react-native';
+import {View, Text, TouchableOpacity, Alert, Linking, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import axios from 'axios';
-import {API_URL} from '@env';
 import {UserContext} from '../../contexts/UserContext';
 import Common from '../../styles/common';
 import voicePermissionScreenStyle from '../../styles/voicePermissionScreenStyle';
+import {requestNotificationPermission, requestAudioPermission} from '../../utils/permissions'; // 유틸리티 파일 import
+import PermissionsAndroid from 'react-native/Libraries/PermissionsAndroid/PermissionsAndroid'; // Android 권한 추가
+import axios from 'axios'; // axios import
+import {API_URL} from '@env'; // API_URL import
 
 const VoicePermissionScreen = () => {
   const [isAllowPressed, setIsAllowPressed] = useState(false);
@@ -23,9 +17,10 @@ const VoicePermissionScreen = () => {
   const handleAllow = async () => {
     setIsAllowPressed(true);
 
-    if (Platform.OS === 'android' && Platform.Version >= 33) {
+    if (Platform.OS === 'android') {
       try {
-        const granted = await PermissionsAndroid.request(
+        // Android에서 알림 권한 요청
+        const notificationGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
           {
             title: '알림 권한 요청',
@@ -34,10 +29,8 @@ const VoicePermissionScreen = () => {
             buttonNegative: '허용하지 않기',
           },
         );
-
-        console.log('권한 요청 결과:', granted);
-
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        
+        if (notificationGranted === PermissionsAndroid.RESULTS.GRANTED) {
           console.log('알림 권한이 허용되었습니다.');
         } else {
           console.log('알림 권한이 거부되었습니다.');
@@ -50,31 +43,62 @@ const VoicePermissionScreen = () => {
             ],
           );
         }
+
+        // Android에서 녹음 권한 요청
+        const audioGranted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+          {
+            title: '마이크 권한 요청',
+            message: 'RealVoice에서 음성을 녹음하도록 허용하시겠습니까?',
+            buttonPositive: '허용하기',
+            buttonNegative: '허용하지 않기',
+          },
+        );
+
+        if (audioGranted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('녹음 권한이 허용되었습니다.');
+        } else {
+          console.log('녹음 권한이 거부되었습니다.');
+          Alert.alert(
+            '녹음 권한 거부됨',
+            '녹음 권한이 거부되었습니다. RealVoice의 모든 기능을 사용하려면 녹음 권한을 활성화해야 합니다.',
+            [
+              {text: '취소', style: 'cancel'},
+              {text: '설정으로 이동', onPress: () => Linking.openSettings()},
+            ],
+          );
+        }
       } catch (err) {
-        console.warn('권한 요청 중 에러 발생:', err);
+        console.warn('Android 권한 요청 중 에러 발생:', err);
+      }
+    } else if (Platform.OS === 'ios') {
+      try {
+        // iOS에서 알림 권한 요청
+        await requestNotificationPermission();
+
+        // iOS에서 녹음 권한 요청
+        await requestAudioPermission();
+
+        // 유저 데이터를 서버에 전송하는 코드 추가
+        const response = await axios.post(`${API_URL}/user/voice/register`, {
+          userUuid: userData.userUuid,
+          callingCode: userData.callingCode,
+          phoneNumber: userData.phoneNumber,
+          nickName: userData.nickName,
+          realName: userData.realName,
+          countryName: userData.countryName,
+          bio: userData.bio,
+          joinYear: userData.joinYear,
+        });
+
+        console.log('유저 데이터가 성공적으로 저장되었습니다:', response.data);
+        navigation.navigate('Main');
+      } catch (error) {
+        console.warn('권한 요청 중 에러 발생:', error);
       }
     }
-    try {
-      const response = await axios.post(`${API_URL}/user/voice/register`, {
-        userUuid: userData.userUuid,
-        callingCode: userData.callingCode,
-        phoneNumber: userData.phoneNumber,
-        nickName: userData.nickName,
-        realName: userData.realName,
-        countryName: userData.countryName,
-        bio: userData.bio,
-        joinYear: userData.joinYear,
-      });
-      console.log('유저 데이터가 성공적으로 저장되었습니다.:', response.data);
-      navigation.navigate('Main');
-    } catch (error) {
-      console.error(
-        `유저 데이터 저장 중 에러 발생 (URL: ${API_URL}/user/voice/register):`,
-        error,
-      );
-    } finally {
-      setIsAllowPressed(false);
-    }
+
+    setIsAllowPressed(false);
   };
 
   const handleDeny = () => {

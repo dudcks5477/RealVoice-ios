@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 const signUpPhoneNumberScreenStyle = StyleSheet.create({
   content: {
     flex: 1,
-    marginTop: 70,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -35,5 +34,9 @@ const signUpPhoneNumberScreenStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  verificationCode: {
+    color: '#fff',
+    fontSize: 15,
+  }
 });
 export default signUpPhoneNumberScreenStyle;
