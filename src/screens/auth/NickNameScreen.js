@@ -33,46 +33,47 @@ const NickNameScreen = ({ userData, setUserData }) => {
   };
   
   // 실제 API 호출 (백엔드 연결 시 사용)
-  // const checkNickNameAvailability = async nickName => {
-  //   try {
-  //     setIsChecking(true); // 로딩 상태 시작
-  //     console.log(`Calling API: ${API_URL}/user/nickname/${nickName}`);
-  //     const response = await fetch(`${API_URL}/user/nickname/${nickName}`, {
-  //       method: 'GET',
-  //       credentials: 'include',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       }
-  //     });
-  //     const data = await response.text();
-  //     console.log(data)
+  const checkNickNameAvailability = async nickName => {
+    try {
+      setIsChecking(true); // 로딩 상태 시작
+      console.log(`Calling API: ${API_URL}/user/nickname/${nickName}`);
+      const response = await fetch(`${API_URL}/user/nickname/${nickName}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = await response.text();
+      console.log(data)
 
-  //     if (response.ok) {
-  //       if (data.trim === '사용 가능한 닉네임 입니다') {
-  //         setIsDuplicate(false);
-  //       } else {
-  //         setIsDuplicate(true);
-  //       }
-  //     } else {
-  //       Alert.alert('서버와 통신 중 문제가 발생했습니다.');
-  //     }
-  //   } catch (error) {
-  //     Alert.alert('네트워크 오류가 발생했습니다.');
-  //     console.warn('권한 요청 중 에러 발생:', error.message);
+      if (response.ok) {
+        const normalizedResponse = data.trim().replace(/\s+/g, '');
+        if (/사용가능한닉네임입니다/.test(normalizedResponse)) {
+          setIsDuplicate(false);
+        } else {
+          setIsDuplicate(true);
+        }
+      } else {
+        Alert.alert('서버와 통신 중 문제가 발생했습니다.');
+      }
+    } catch (error) {
+      Alert.alert('네트워크 오류가 발생했습니다.');
+      console.warn('권한 요청 중 에러 발생:', error.message);
 
-  //       if (error.response) {
-  //         console.log('서버 응답 데이터:', error.response.data);
-  //         console.log('서버 응답 상태 코드:', error.response.status);
-  //         console.log('서버 응답 헤더:', error.response.headers);
-  //       } else if (error.request) {
-  //         console.log('요청은 보내졌으나 응답이 없습니다:', error.request);
-  //       } else {
-  //         console.log('에러를 발생시킨 요청 설정:', error.config);
-  //       }
-  //   } finally {
-  //     setIsChecking(false); // 로딩 상태 종료
-  //   }
-  // };
+        if (error.response) {
+          console.log('서버 응답 데이터:', error.response.data);
+          console.log('서버 응답 상태 코드:', error.response.status);
+          console.log('서버 응답 헤더:', error.response.headers);
+        } else if (error.request) {
+          console.log('요청은 보내졌으나 응답이 없습니다:', error.request);
+        } else {
+          console.log('에러를 발생시킨 요청 설정:', error.config);
+        }
+    } finally {
+      setIsChecking(false); // 로딩 상태 종료
+    }
+  };
 
   // 다음 버튼 클릭 핸들러
   const handleNextPress = () => {

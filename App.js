@@ -8,12 +8,14 @@ import {RecordingProvider} from './src/services/RecordingContext.js';
 // import {onAuthStateChanged} from 'firebase/auth';
 import uuid from 'react-native-uuid';
 
+// 회원가입
 import {UserProvider, useUser} from './src/contexts/UserContext.js';
 import SplashScreen from './src/components/SplashScreen';
 import SignUpPhoneNumberScreen from './src/screens/auth/SignUpPhoneNumberScreen.js';
 import NickNameScreen from './src/screens/auth/NickNameScreen.js';
 import VoicePermissionScreen from './src/screens/auth/VoicePermissionScreen.js';
 
+// 메인
 import MainScreen from './src/screens/MainScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import UserProfileScreen from './src/screens/UserProfileScreen';

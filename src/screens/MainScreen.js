@@ -31,11 +31,11 @@ const MainScreen = () => {
 
   useEffect(() => {
     const fetchUserInfo = async uuid => {
+      console.log('사용자 UUID:', userData.uuid);
       try {
         const response = await axios.get(`${API_URL}/user/profile/${uuid}`);
         console.log('User info fetched successfully:', response.data);
-
-        console.log('API 응답 데이터:', response.data);
+        console.log('요청 URL:', `${API_URL}/user/profile/${userData.userUuid}`);
 
         if (response.data && response.data.nickName) {
           setUserName(response.data.nickName);
@@ -53,10 +53,10 @@ const MainScreen = () => {
         );
       }
     };
-    if (userData.phoneNumber) {
-      fetchUserInfo(userData.phoneNumber);
+    if (userData.uuid) {
+      fetchUserInfo(userData.uuid);
     }
-  }, [userData.phoneNumber, setUserData]);
+  }, [userData.uuid, setUserData]);
 
   const firstLetter = userName ? userName.charAt(0).toUpperCase() : '';
 
