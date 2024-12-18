@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } fro
 import { useNavigation } from '@react-navigation/native';
 import Common from '../../styles/common';
 import nickNameScreenStyle from '../../styles/nickNameScreenStyle';
+import {API_URL} from '@env';
 
 const NickNameScreen = ({ userData, setUserData }) => {
   const [nickName, setNickName] = useState(userData.nickName || '');
@@ -22,7 +23,7 @@ const NickNameScreen = ({ userData, setUserData }) => {
       }));
 
       if (text.length >= 2) {
-        simulateNickNameCheck(text); // 백엔드 연결 대신 로컬 시뮬레이션 함수 호출
+       checkNickNameAvailability (text); // 백엔드 함수 호출
       } else {
         setIsDuplicate(false); // 2글자 미만 시 중복 여부 초기화
       }
@@ -30,47 +31,48 @@ const NickNameScreen = ({ userData, setUserData }) => {
       Alert.alert('소문자로만 입력해주세요.');
     }
   };
-
-  // 닉네임 중복 체크 시뮬레이션
-  const simulateNickNameCheck = nickName => {
-    setIsChecking(true); // 로딩 상태 시작
-
-    // 시뮬레이션: 1초 후 결과 업데이트
-    setTimeout(() => {
-      // "nick"은 중복된 닉네임으로 가정
-      if (nickName === 'nick') {
-        setIsDuplicate(true);
-      } else {
-        setIsDuplicate(false);
-      }
-      setIsChecking(false); // 로딩 상태 종료
-    }, 1000);
-  };
-
-  /*
+  
   // 실제 API 호출 (백엔드 연결 시 사용)
-  const checkNickNameAvailability = async nickName => {
-    try {
-      setIsChecking(true); // 로딩 상태 시작
-      const response = await fetch(`https://localhost:8081/user/nickname/${nickName}`);
-      const data = await response.text();
+  // const checkNickNameAvailability = async nickName => {
+  //   try {
+  //     setIsChecking(true); // 로딩 상태 시작
+  //     console.log(`Calling API: ${API_URL}/user/nickname/${nickName}`);
+  //     const response = await fetch(`${API_URL}/user/nickname/${nickName}`, {
+  //       method: 'GET',
+  //       credentials: 'include',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       }
+  //     });
+  //     const data = await response.text();
+  //     console.log(data)
 
-      if (response.ok) {
-        if (data === '사용 가능한 닉네임 입니다') {
-          setIsDuplicate(false);
-        } else {
-          setIsDuplicate(true);
-        }
-      } else {
-        Alert.alert('서버와 통신 중 문제가 발생했습니다.');
-      }
-    } catch (error) {
-      Alert.alert('네트워크 오류가 발생했습니다.');
-    } finally {
-      setIsChecking(false); // 로딩 상태 종료
-    }
-  };
-  */
+  //     if (response.ok) {
+  //       if (data.trim === '사용 가능한 닉네임 입니다') {
+  //         setIsDuplicate(false);
+  //       } else {
+  //         setIsDuplicate(true);
+  //       }
+  //     } else {
+  //       Alert.alert('서버와 통신 중 문제가 발생했습니다.');
+  //     }
+  //   } catch (error) {
+  //     Alert.alert('네트워크 오류가 발생했습니다.');
+  //     console.warn('권한 요청 중 에러 발생:', error.message);
+
+  //       if (error.response) {
+  //         console.log('서버 응답 데이터:', error.response.data);
+  //         console.log('서버 응답 상태 코드:', error.response.status);
+  //         console.log('서버 응답 헤더:', error.response.headers);
+  //       } else if (error.request) {
+  //         console.log('요청은 보내졌으나 응답이 없습니다:', error.request);
+  //       } else {
+  //         console.log('에러를 발생시킨 요청 설정:', error.config);
+  //       }
+  //   } finally {
+  //     setIsChecking(false); // 로딩 상태 종료
+  //   }
+  // };
 
   // 다음 버튼 클릭 핸들러
   const handleNextPress = () => {
@@ -100,7 +102,7 @@ const NickNameScreen = ({ userData, setUserData }) => {
         {!isDuplicate && nickName.length >= 2 && !isChecking && (
           <Text style={[Common.text, { color: 'green' }]}>사용 가능한 닉네임 입니다</Text>
         )}
-        <Text style={[Common.text, {marginTop: 10}]}>
+        <Text style={[Common.text, { marginTop: 10 }]}>
           두 글자 이상 영소문자를 입력하세요{'\n'}
           언제든지 변경할 수 있습니다
         </Text>

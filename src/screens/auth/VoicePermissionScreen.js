@@ -20,29 +20,29 @@ const VoicePermissionScreen = () => {
     if (Platform.OS === 'android') {
       try {
         // Android에서 알림 권한 요청
-        const notificationGranted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-          {
-            title: '알림 권한 요청',
-            message: 'RealVoice에서 알림을 표시하도록 허용하시겠습니까?',
-            buttonPositive: '허용하기',
-            buttonNegative: '허용하지 않기',
-          },
-        );
+        // const notificationGranted = await PermissionsAndroid.request(
+        //   PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        //   {
+        //     title: '알림 권한 요청',
+        //     message: 'RealVoice에서 알림을 표시하도록 허용하시겠습니까?',
+        //     buttonPositive: '허용하기',
+        //     buttonNegative: '허용하지 않기',
+        //   },
+        // );
         
-        if (notificationGranted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('알림 권한이 허용되었습니다.');
-        } else {
-          console.log('알림 권한이 거부되었습니다.');
-          Alert.alert(
-            '알림 권한 거부됨',
-            '알림 권한이 거부되었습니다. 설정에서 알림 권한을 활성화해야 RealVoice의 모든 기능을 사용할 수 있습니다.',
-            [
-              {text: '취소', style: 'cancel'},
-              {text: '설정으로 이동', onPress: () => Linking.openSettings()},
-            ],
-          );
-        }
+        // if (notificationGranted === PermissionsAndroid.RESULTS.GRANTED) {
+        //   console.log('알림 권한이 허용되었습니다.');
+        // } else {
+        //   console.log('알림 권한이 거부되었습니다.');
+        //   Alert.alert(
+        //     '알림 권한 거부됨',
+        //     '알림 권한이 거부되었습니다. 설정에서 알림 권한을 활성화해야 RealVoice의 모든 기능을 사용할 수 있습니다.',
+        //     [
+        //       {text: '취소', style: 'cancel'},
+        //       {text: '설정으로 이동', onPress: () => Linking.openSettings()},
+        //     ],
+        //   );
+        // }
 
         // Android에서 녹음 권한 요청
         const audioGranted = await PermissionsAndroid.request(
@@ -57,6 +57,21 @@ const VoicePermissionScreen = () => {
 
         if (audioGranted === PermissionsAndroid.RESULTS.GRANTED) {
           console.log('녹음 권한이 허용되었습니다.');
+
+          const response = await axios.post(`${API_URL}/user/voice/register`, {
+            userUuid: userData.userUuid,
+            callingCode: userData.callingCode,
+            phoneNumber: userData.phoneNumber,
+            nickName: userData.nickName,
+            realName: userData.realName,
+            countryName: userData.countryName,
+            bio: userData.bio,
+            joinYear: userData.joinYear,
+          });
+
+          console.log('유저 데이터가 성공적으로 저장되었습니다:', response.data);
+
+          navigation.navigate('Main');
         } else {
           console.log('녹음 권한이 거부되었습니다.');
           Alert.alert(
@@ -74,7 +89,7 @@ const VoicePermissionScreen = () => {
     } else if (Platform.OS === 'ios') {
       try {
         // iOS에서 알림 권한 요청
-        await requestNotificationPermission();
+        // await requestNotificationPermission();
 
         // iOS에서 녹음 권한 요청
         await requestAudioPermission();
@@ -94,7 +109,17 @@ const VoicePermissionScreen = () => {
         console.log('유저 데이터가 성공적으로 저장되었습니다:', response.data);
         navigation.navigate('Main');
       } catch (error) {
-        console.warn('권한 요청 중 에러 발생:', error);
+        console.warn('권한 요청 중 에러 발생:', error.message);
+
+        if (error.response) {
+          console.log('서버 응답 데이터:', error.response.data);
+          console.log('서버 응답 상태 코드:', error.response.status);
+          console.log('서버 응답 헤더:', error.response.headers);
+        } else if (error.request) {
+          console.log('요청은 보내졌으나 응답이 없습니다:', error.request);
+        } else {
+          console.log('에러를 발생시킨 요청 설정:', error.config);
+        }
       }
     }
 
@@ -114,16 +139,16 @@ const VoicePermissionScreen = () => {
         RealVoice를 언제{'\n'} 들려주실껀가요
       </Text>
       <Text style={voicePermissionScreenStyle.subText}>
-        RealVoice를 들려줄 시간을 알 수 있는 유일한 방법은,{'\n'}알림을 활성화
+        RealVoice를 들려줄 시간을 알 수 있는 유일한 방법은,{'\n'}녹음을 활성화
         하는 것 뿐이에요!
       </Text>
       <View style={voicePermissionScreenStyle.permissionContaine}>
         <Text style={voicePermissionScreenStyle.permissionHeaderText}>
-          알림을 활성화 해주세요.
+          녹음을 활성화 해주세요.
         </Text>
         <Text style={voicePermissionScreenStyle.permissionText}>
-          하루에 한 번 RealVoice를 들려줄 시간을{'\n'}알려주는 알림을 제외하면
-          모든 알람은{'\n'}무음이에요.
+          하루에 한 번 RealVoice를 들려줄 시간을{'\n'}알려주는 녹음과 알림을 제외하면
+          {'\n'}즐길 수 없어요.
         </Text>
         <View style={voicePermissionScreenStyle.permitBtn}>
           <TouchableOpacity
