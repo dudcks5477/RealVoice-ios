@@ -7,7 +7,9 @@ import {
   Alert,
   TextInput,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import axios from 'axios';
+import {API_URL} from '@env';
+import Icon from '@react-native-vector-icons/material-icons';
 import {useNavigation} from '@react-navigation/native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {UserContext} from '../contexts/UserContext';
@@ -34,12 +36,13 @@ const getRandomImage = () => {
 const ProfileEditDetailScreen = () => {
   const [randomImage, setRandomImage] = useState(getRandomImage());
   const [profileImage, setProfileImage] = useState(null);
+  const {userData, setUserData} = useContext(UserContext);
   const [nickName, setNickName] = useState('');
   const [realName, setRealName] = useState('');
   const [bio, setBio] = useState('당신의 진실한 목소리를 들려주세요.');
   const [countryName, setCountryName] = useState('KOREA');
+  const [isModified, setIsModified] = useState(false);
   const navigation = useNavigation();
-  const {userData, setUser} = useContext(UserContext);
 
   useEffect(() => {
     if (userData) {
@@ -49,6 +52,16 @@ const ProfileEditDetailScreen = () => {
       setCountryName(userData.countryName || '');
     }
   }, [userData]);
+
+  useEffect(() => {
+    const hasChanges =
+      nickName !== (userData?.nickName || '') ||
+      realName !== (userData?.realName || '') ||
+      bio !== (userData?.bio || '당신의 진실한 목소리를 들려주세요') ||
+      countryName !== (userData?.countryName || '');
+
+    setIsModified(hasChanges);
+  }, [nickName, realName, bio, countryName, userData]);
 
   const handleChangeProfile = () => {
     Alert.alert(
@@ -60,7 +73,7 @@ const ProfileEditDetailScreen = () => {
           onPress: () =>
             launchCamera({mediaType: 'photo'}, response => {
               if (response.didCancel) {
-                console.log('User canceled image pikcer');
+                console.log('User canceled image picker');
               } else if (response.error) {
                 console.log('ImagePicker Error: ', response.error);
               } else {
@@ -90,15 +103,28 @@ const ProfileEditDetailScreen = () => {
     );
   };
 
-  const handleEditProfile = () => {
-    setUser({
-      ...userData,
-      nickName: nickName,
-      realName: realName,
-      bio: bio,
-      country: countryName,
-    });
-    navigation.navigate('EditProfile');
+  const handleEditProfile = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/user/profile/updateNickname`, {
+        userUuid: userData.uuid,
+        beforeNickname: userData.nickName,
+        afterNickname: nickName
+      });
+
+      if (response.status === 200) {
+        Alert.alert('성공', '프로필이 성공적으로 업데이트되었습니다.');
+        setUserData(prevData => ({
+          ...prevData,
+          nickName,
+        }));
+        navigation.navigate('EditProfile');
+      } else {
+        Alert.alert('실패', '프로필 업데이트에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('프로필 업데이트 오류:', error.message || error);
+      Alert.alert('오류', '프로필 업데이트 중 문제가 발생했습니다.');
+    }
   };
 
   return (
@@ -110,7 +136,7 @@ const ProfileEditDetailScreen = () => {
       <View style={mainScreenStyle.header}>
         <TouchableOpacity
           style={mainScreenStyle.iconContainer}
-          onPress={handleEditProfile}>
+          onPress={() => navigation.goBack()}>
           <View style={profileScreenStyle.headerBack}>
             <Icon name="arrow-back" style={profileScreenStyle.icon} />
             <Text style={profileScreenStyle.headerText}>프로필 수정</Text>
@@ -161,12 +187,16 @@ const ProfileEditDetailScreen = () => {
           <TextInput
             style={profileEditDetailScreenStyle.userNameInput}
             value={countryName}
-            onChange={setCountryName}
+            onChangeText={setCountryName}
           />
         </View>
         <TouchableOpacity
-          style={profileEditDetailScreenStyle.saveBtnContainer}
-          onPress={handleEditProfile}>
+          style={[
+            profileEditDetailScreenStyle.saveBtnContainer,
+            {backgroundColor: isModified ? '#fff' : '#606060'},
+          ]}
+          onPress={handleEditProfile}
+          disabled={!isModified}>
           <Text style={profileEditDetailScreenStyle.saveBtnText}>저장</Text>
         </TouchableOpacity>
       </View>

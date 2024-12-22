@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, View, Text} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import profileScreenStyle from '../../styles/profileScreenStyle';
 
 const CalendarButton = ({day, isToday}) => {

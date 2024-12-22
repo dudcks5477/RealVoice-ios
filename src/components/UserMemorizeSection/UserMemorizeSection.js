@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import profileScreenStyle from '../../styles/profileScreenStyle';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import CalendarButton from './CalendarButton';
 
 const getLast20Days = () => {

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, Alert} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import addFriendsScreenStyle from '../styles/AddFriendsScreenStyle';
 import mainScreenStyle from '../styles/mainScreenStyle';
 

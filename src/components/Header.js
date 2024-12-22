@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import addFriendsScreenStyle from '../styles/AddFriendsScreenStyle';
 
 const Header = ({onMain}) => {

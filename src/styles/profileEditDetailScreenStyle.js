@@ -53,7 +53,6 @@ const profileEditDetailScreenStyle = StyleSheet.create({
     height: 46,
     borderRadius: 14,
     marginTop: 80,
-    backgroundColor: '#606060',
     alignItems: 'center',
     justifyContent: 'center',
   },

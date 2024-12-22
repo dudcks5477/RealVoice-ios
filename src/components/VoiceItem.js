@@ -7,7 +7,7 @@ import {
   FlatList,
   TouchableWithoutFeedback,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import uploadMainScreenStyle from '../styles/uploadMainScreenStyle';
 import mainScreenStyle from '../styles/mainScreenStyle';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';

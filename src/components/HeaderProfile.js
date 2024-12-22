@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 
 import mainScreenStyle from '../styles/mainScreenStyle';
 import profileScreenStyle from '../styles/profileScreenStyle';

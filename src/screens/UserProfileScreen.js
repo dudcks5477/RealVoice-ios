@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import {useNavigation} from '@react-navigation/native';
 import {UserContext} from '../contexts/UserContext';
 

@@ -9,7 +9,6 @@ const recordScreenStyle = StyleSheet.create({
     borderRadius: 11,
     opacity: 0.8,
     height: 740,
-    zIndex: -1,
     marginTop: 30,
     width: '100%',
   },

@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {View, Text, TouchableOpacity, Alert} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -29,10 +29,10 @@ const OtherSettingScreen = () => {
     }
   };
 
-  const deleteAccount = async () => {
+  const deleteAccount = async userUuid => {
     Alert.alert(
       '계정 삭제',
-      '계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
+      "회원님이 탈퇴를 요청하신 경우, 커뮤니티의 안전성과 원활한 운영을 위해 회원님의 일부 개인정보(휴대폰번호)가 신고 관리 목적으로 최대 6개월간 보관됩니다.\n이 기간 동안 보관된 개인정보는 신고된 게시물 및 사용자 보호를 위한 용도로만 사용되며, 6개월 경과 후에는 완전히 삭제됩니다.",
       [
         {
           text: '취소',
@@ -42,14 +42,15 @@ const OtherSettingScreen = () => {
           text: '삭제',
           onPress: async () => {
             try {
-              const response = await axios.delete(`${API_URL}/api/users`, {
-                headers: {
-                  Authorization: 'Bearer YOUR_AUTH_TOKEN',
-                },
-              });
+              const url = `${API_URL}/user/remove`;
+              console.log('Request URL:', url);
+              const response = await axios.post(url, {userUuid});
+              console.log('Response:', response.data);
               console.log('계정이 성공적으로 삭제되었습니다.');
               navigation.navigate('Splash');
             } catch (error) {
+              console.log('User UUID:', userUuid)
+              console.log('Error response:', error.response?.data || error.message);
               console.error('계정 삭제 중 에러 발생:', error);
             }
           },
@@ -83,7 +84,7 @@ const OtherSettingScreen = () => {
         </View>
         <TouchableOpacity
           style={otherSettingScreenStyle.logoutContainer}
-          onPress={deleteAccount}>
+          onPress={() => deleteAccount(userData.userUuid)}>
           <Text style={editProfileScreenStyle.logoutText}>계정 삭제</Text>
         </TouchableOpacity>
       </View>

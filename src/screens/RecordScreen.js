@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import {useNavigation} from '@react-navigation/native';
 import {UserContext} from '../contexts/UserContext';
 
@@ -35,7 +35,6 @@ const RecordScreen = () => {
   const handleRecording = () => {
     navigation.navigate('Recording', {startImmediately: true});
   };
-
   return (
     <View style={Common.container}>
       <View>
@@ -43,7 +42,7 @@ const RecordScreen = () => {
           <TouchableOpacity
             style={mainScreenStyle.iconContainer}
             onPress={handleMain}>
-            <Icon name="keyboard-arrow-down" style={mainScreenStyle.icon} />
+            <Icon name="arrow-back" style={mainScreenStyle.icon} />
           </TouchableOpacity>
           <Text style={mainScreenStyle.headerText}>RealVoice</Text>
           <View style={addFriendsScreenStyle.iconContainer}>

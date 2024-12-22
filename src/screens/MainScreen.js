@@ -35,7 +35,7 @@ const MainScreen = () => {
       try {
         const response = await axios.get(`${API_URL}/user/profile/${uuid}`);
         console.log('User info fetched successfully:', response.data);
-        console.log('요청 URL:', `${API_URL}/user/profile/${userData.userUuid}`);
+        console.log('요청 URL:', `${API_URL}/user/profile/${userData.uuid}`);
 
         if (response.data && response.data.nickName) {
           setUserName(response.data.nickName);

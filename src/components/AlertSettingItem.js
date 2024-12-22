@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, Switch} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import alertSettingScreenStyle from '../styles/alertSettingScreenStyle';
 
 const AlertSettingItem = ({iconName, text, value, onValueChange}) => {

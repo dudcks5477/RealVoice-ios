@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {View, Text, TouchableOpacity, Image, Alert} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import {RecordingContext} from '../services/RecordingContext';
