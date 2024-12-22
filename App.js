@@ -4,8 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RecordingProvider} from './src/services/RecordingContext.js';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-// import {auth} from './src/services/firebase.js';
-// import {onAuthStateChanged} from 'firebase/auth';
+import firebase from '@react-native-firebase/app';
 import uuid from 'react-native-uuid';
 
 // 회원가입
@@ -39,7 +38,6 @@ import InformationScreen from './src/screens/InformationScreen.js';
 const Stack = createStackNavigator();
 
 const AppContent = () => {
-  const [initialRoute, setInitialRoute] = useState('Splash');
   const {userData, setUserData} = useUser();
 
   useEffect(() => {
@@ -64,7 +62,7 @@ const AppContent = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={initialRoute}
+        initialRouteName="Splash"
         screenOptions={{
           headerShown: false,
         }}>
