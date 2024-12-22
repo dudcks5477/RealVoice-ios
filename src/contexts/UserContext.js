@@ -19,7 +19,10 @@ export const UserProvider = ({children}) => {
   });
 
   const setUser = newUserData => {
-    setUserData(newUserData);
+    setUserData(prevState => ({
+      ...prevState,
+      ...newUserData,
+    }));
   };
 
   return (
