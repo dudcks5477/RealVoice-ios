@@ -16,6 +16,7 @@ export const UserProvider = ({children}) => {
     bio: '',
     countryName: 'KOREA',
     joinYear: '2024',
+    createTime: new Date().toISOString(),
   });
 
   const setUser = newUserData => {

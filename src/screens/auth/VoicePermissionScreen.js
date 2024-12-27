@@ -67,6 +67,7 @@ const VoicePermissionScreen = () => {
             countryName: userData.countryName,
             bio: userData.bio,
             joinYear: userData.joinYear,
+            createTime: userData.createTime,
           });
 
           console.log('유저 데이터가 성공적으로 저장되었습니다:', response.data);
@@ -104,6 +105,7 @@ const VoicePermissionScreen = () => {
           countryName: userData.countryName,
           bio: userData.bio,
           joinYear: userData.joinYear,
+          createTime: createTime,
         });
 
         console.log('유저 데이터가 성공적으로 저장되었습니다:', response.data);
