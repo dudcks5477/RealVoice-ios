@@ -142,12 +142,6 @@ const ProfileEditDetailScreen = () => {
           realName,
         });
 
-        // const response = await axios.post(`${API_URL}/user/profile/update`, {
-        //   userUuid: userData.uuid,
-        //   beforeNickname: userData.nickName,
-        //   afterNickname: nickName
-        // });
-
         Alert.alert('성공', '프로필이 성공적으로 업데이트되었습니다.');
         navigation.navigate('EditProfile');
       } catch (error) {
@@ -159,20 +153,6 @@ const ProfileEditDetailScreen = () => {
           type: 'nickName',
         })
       }
-      //   if (response.status === 200) {
-      //     Alert.alert('성공', '프로필이 성공적으로 업데이트되었습니다.');
-      //     setUserData(prevData => ({
-      //       ...prevData,
-      //       nickName,
-      //     }));
-      //     navigation.navigate('EditProfile');
-      //   } else {
-      //     Alert.alert('실패', '프로필 업데이트에 실패했습니다.');
-      //   }
-      // } catch (error) {
-      //   console.error('프로필 업데이트 오류:', error.message || error);
-      //   Alert.alert('오류', '프로필 업데이트 중 문제가 발생했습니다.');
-      // }
   };
 
   return (
