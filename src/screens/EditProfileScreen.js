@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {View, Text, TouchableOpacity, Share, Linking} from 'react-native';
+import {View, Text, TouchableOpacity, Share, Linking, Alert} from 'react-native';
 import Icon from '@react-native-vector-icons/material-icons';
 import {useNavigation} from '@react-navigation/native';
 import {UserContext} from '../contexts/UserContext';
@@ -111,7 +111,16 @@ const EditProfileScreen = () => {
           <Text style={editProfileScreenStyle.containerText}>기능</Text>
           <TouchableOpacity
             style={editProfileScreenStyle.actionBtn}
-            onPress={handleMemorySetting}>
+            onPress={() => {
+              Alert.alert(
+                "알림",
+                "이 기능은 아직 준비 중입니다.",
+                [
+                  { text: "확인", onPress: () => console.log("확인 버튼 클릭됨") }
+                ],
+                { cancelable: true }
+              );
+            }}>
             <View style={mainScreenStyle.buttonContainer}>
               <Icon
                 name="calendar-month"
