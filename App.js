@@ -24,11 +24,13 @@ import RecordingScreen from './src/screens/RecordingScreen.js';
 import UploadMainScreen from './src/screens/UploadMainScreen.js';
 import EditProfileScreen from './src/screens/EditProfileScreen.js';
 import ProfileEditDetailScreen from './src/screens/ProfileEditDetailScreen.js';
-import MemorySettingScreen from './src/screens/MemorySettingScreen.js';
+
+// 세팅
+// import MemorySettingScreen from './src/screens/MemorySettingScreen.js';
 import AlertSettingScreen from './src/screens/AlertSettingScreen.js';
-import PrivacyScreen from './src/screens/PrivacyScreen.js';
-import BlockedScreen from './src/screens/BlockedScreen.js';
-import HidedScreen from './src/screens/HidedScreen.js';
+// import PrivacyScreen from './src/screens/PrivacyScreen.js';
+// import BlockedScreen from './src/screens/BlockedScreen.js';
+// import HidedScreen from './src/screens/HidedScreen.js';
 import WorldTimeScreen from './src/screens/WorldTimeScreen.js';
 import OtherSettingScreen from './src/screens/OtherSettingScreen.js';
 import HelpScreen from './src/screens/HelpScreen.js';
@@ -102,11 +104,11 @@ const AppContent = () => {
           name="ProfileEditDetail"
           component={ProfileEditDetailScreen}
         />
-        <Stack.Screen name="MemorySetting" component={MemorySettingScreen} />
+        {/* <Stack.Screen name="MemorySetting" component={MemorySettingScreen} /> */}
         <Stack.Screen name="AlertSetting" component={AlertSettingScreen} />
-        <Stack.Screen name="Privacy" component={PrivacyScreen} />
-        <Stack.Screen name="Blocked" component={BlockedScreen} />
-        <Stack.Screen name="Hided" component={HidedScreen} />
+        {/* <Stack.Screen name="Privacy" component={PrivacyScreen} /> */}
+        {/* <Stack.Screen name="Blocked" component={BlockedScreen} /> */}
+        {/* <Stack.Screen name="Hided" component={HidedScreen} /> */}
         <Stack.Screen name="WorldTime" component={WorldTimeScreen} />
         <Stack.Screen name="OtherSetting" component={OtherSettingScreen} />
         <Stack.Screen name="Help" component={HelpScreen} />
