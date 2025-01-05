@@ -22,15 +22,15 @@ const EditProfileScreen = () => {
   const handleProfileEditDetail = () => {
     navigation.navigate('ProfileEditDetail');
   };
-  const handleMemorySetting = () => {
-    navigation.navigate('MemorySetting');
-  };
+  // const handleMemorySetting = () => {
+  //   navigation.navigate('MemorySetting');
+  // };
   const handleAlertSetting = () => {
     navigation.navigate('AlertSetting');
   };
-  const handlePrivacy = () => {
-    navigation.navigate('Privacy');
-  };
+  // const handlePrivacy = () => {
+  //   navigation.navigate('Privacy');
+  // };
   const handleWorldTime = () => {
     navigation.navigate('WorldTime');
   };
@@ -146,7 +146,16 @@ const EditProfileScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={editProfileScreenStyle.settingBtn}
-            onPress={handlePrivacy}>
+            onPress={() => {
+              Alert.alert(
+                "알림",
+                "이 기능은 아직 준비 중입니다.",
+                [
+                  { text: "확인", onPress: () => console.log("확인 버튼 클릭됨") }
+                ],
+                { cancelable: true }
+              );
+            }}>
             <View style={mainScreenStyle.buttonContainer}>
               <Icon
                 name="security"
