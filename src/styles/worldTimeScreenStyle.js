@@ -1,4 +1,16 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet, Dimensions, PixelRatio } from 'react-native';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const BASE_WIDTH = 360;
+const BASE_HEIGHT = 800;
+
+function normalize(size) {
+  return Math.round(PixelRatio.roundToNearestPixel(size * (SCREEN_WIDTH / BASE_WIDTH)));
+}
+
+function normalizeHeight(size) {
+  return Math.round(PixelRatio.roundToNearestPixel(size * (SCREEN_HEIGHT / BASE_HEIGHT)));
+}
 
 const worldTimeScreenStyle = StyleSheet.create({
   EditBtnContainer: {
@@ -6,23 +18,23 @@ const worldTimeScreenStyle = StyleSheet.create({
     alignItems: 'center',
   },
   containerText: {
-    fontSize: 13,
-    marginBottom: 20,
+    fontSize: normalize(12),
+    marginBottom: normalizeHeight(20),
     color: '#fff',
     fontWeight: 'bold',
   },
   logoutContainer: {
-    width: 360,
-    height: 46,
-    borderRadius: 14,
-    bottom: -470,
+    width: normalize(315),
+    height: normalizeHeight(46),
+    borderRadius: normalize(14),
+    bottom: normalizeHeight(-450),
     backgroundColor: '#606060',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
   },
   logoutText: {
-    fontSize: 13,
+    fontSize: normalize(12),
     fontWeight: 'bold',
     color: '#000',
   },
