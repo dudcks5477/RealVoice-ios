@@ -1,4 +1,17 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions, PixelRatio} from 'react-native';
+
+const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
+const BASE_WIDTH = 360;
+const BASE_HEIGHT = 800;
+
+function normalize(size) {
+  return Math.round(PixelRatio.roundToNearestPixel(size * (SCREEN_WIDTH / BASE_WIDTH)));
+}
+
+function normalizeHeight(size) {
+  return Math.round(PixelRatio.roundToNearestPixel(size * (SCREEN_HEIGHT / BASE_HEIGHT)));
+}
+
 
 const Common = StyleSheet.create({
   container: {
@@ -9,8 +22,8 @@ const Common = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
-    fontSize: 18,
-    marginTop: 75,
+    fontSize: normalize(18),
+    marginTop: normalizeHeight(30),
   },
   text: {
     color: '#fff',
@@ -31,19 +44,19 @@ const Common = StyleSheet.create({
   },
   nextBtn: {
     backgroundColor: '#fff',
-    width: 160,
-    height: 53,
+    width: normalize(160),
+    height: normalizeHeight(53),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 30,
+    borderRadius: normalizeHeight(30),
   },
   nextBtnContainer: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: normalizeHeight(30),
   },
   nextBtnText: {
     color: '#000',
-    fontSize: 16,
+    fontSize: normalize(16),
   },
 });
 export default Common;
