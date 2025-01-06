@@ -1,49 +1,61 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet, Dimensions, PixelRatio } from 'react-native';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const BASE_WIDTH = 360;
+const BASE_HEIGHT = 800;
+
+function normalize(size) {
+  return Math.round(PixelRatio.roundToNearestPixel(size * (SCREEN_WIDTH / BASE_WIDTH)));
+}
+
+function normalizeHeight(size) {
+  return Math.round(PixelRatio.roundToNearestPixel(size * (SCREEN_HEIGHT / BASE_HEIGHT)));
+}
 
 const profileScreenStyle = StyleSheet.create({
   headerBack: {
-    marginLeft: 10,
+    marginLeft: normalize(10),
     flexDirection: 'row',
     alignItems: 'center',
   },
   icon: {
     color: '#fff',
-    fontSize: 21,
+    fontSize: normalize(21),
   },
   headerText: {
-    fontSize: 16,
+    fontSize: normalize(16),
     color: '#fff',
     fontWeight: 'bold',
   },
   image: {
     flex: 1,
-    height: 336,
+    height: normalizeHeight(336),
     opacity: 0.8,
     width: '100%',
     position: 'absolute',
   },
   bottomTextContainer: {
-    marginLeft: 20,
-    marginTop: 230,
+    marginLeft: normalize(20),
+    marginTop: normalizeHeight(230),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   bottomText: {
     color: '#fff',
-    fontSize: 30,
+    fontSize: normalize(30),
     fontWeight: 'bold',
   },
   iconShare: {
     color: '#fff',
-    fontSize: 21,
-    marginRight: 14,
+    fontSize: normalize(21),
+    marginRight: normalize(14),
   },
   introContainer: {
-    padding: 24,
+    padding: normalizeHeight(24),
   },
   introFix: {
-    fontSize: 17,
+    fontSize: normalize(17),
     color: '#fff',
     fontWeight: 'bold',
   },
@@ -52,8 +64,8 @@ const profileScreenStyle = StyleSheet.create({
     fontWeight: 'bold',
   },
   userMemorizeContainer: {
-    marginTop: -20,
-    padding: 24,
+    marginTop: normalize(-20),
+    padding: normalizeHeight(24),
   },
   memorizeHeader: {
     flexDirection: 'row',
@@ -61,59 +73,59 @@ const profileScreenStyle = StyleSheet.create({
     alignItems: 'center',
   },
   memorizeFix: {
-    fontSize: 20,
+    fontSize: normalize(20),
     color: '#fff',
     fontWeight: 'bold',
   },
   iconLock: {
-    fontSize: 15,
-    marginRight: 5,
+    fontSize: normalize(15),
+    marginRight: normalize(5),
     color: '#606060',
   },
   calenderContainer: {
-    marginTop: 20,
-    height: 335,
-    borderRadius: 15,
+    marginTop: normalizeHeight(20),
+    height: normalizeHeight(335),
+    borderRadius: normalize(15),
     backgroundColor: '#606060',
   },
   calenderHeader: {
-    marginTop: 20,
-    marginLeft: 15,
-    fontSize: 15,
+    marginTop: normalizeHeight(20),
+    marginLeft: normalize(15),
+    fontSize: normalize(15),
     color: '#fff',
     fontWeight: 'bold',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginVertical: 5,
+    marginVertical: normalize(5),
   },
   calenderBtnContainer: {
-    paddingTop: 15,
+    paddingTop: normalizeHeight(15),
     flexDirection: 'row',
   },
   calenderBtn: {
-    width: 43,
-    height: 55,
-    borderRadius: 15,
-    marginTop: 6,
+    width: normalize(43),
+    height: normalizeHeight(55),
+    borderRadius: normalize(15),
+    marginTop: normalizeHeight(6),
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
   },
   todayCircle: {
-    borderWidth: 4,
+    borderWidth: normalize(4),
     borderColor: '#000',
-    borderRadius: 15,
+    borderRadius: normalize(15),
   },
   iconPlay: {
     opacity: 0.6,
-    fontSize: 30,
+    fontSize: normalize(30),
     color: '#000',
     position: 'absolute',
   },
   calenderDay: {
-    fontSize: 20,
+    fontSize: normalize(20),
     color: '#000',
     fontWeight: '900',
   },
