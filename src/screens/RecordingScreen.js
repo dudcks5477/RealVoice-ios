@@ -51,7 +51,9 @@ const RecordingScreen = () => {
         type: 'audio/mpeg',
         name: 'recording.mp3',
       });
-      formData.append('uuid', userData.uuid);
+      formData.append('uuid', userData.userUuid);
+
+      console.log("Uploading audio with UUID:", userData.userUuid);
       const response = await axios.post(`${API_URL}/audio/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
