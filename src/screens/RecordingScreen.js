@@ -13,6 +13,7 @@ import mainScreenStyle from '../styles/mainScreenStyle';
 import addFriendsScreenStyle from '../styles/AddFriendsScreenStyle';
 import recordScreenStyle from '../styles/recordScreenStyle';
 import recordingScreenStyle from '../styles/recordingScreenStyle';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
 
@@ -102,15 +103,16 @@ const RecordingScreen = () => {
   const handleToggleRecording = async () => {
     try {
       if (isRecording) {
-        await audioRecorderPlayer.stopRecorder();
+        const result = await audioRecorderPlayer.stopRecorder();
         audioRecorderPlayer.removeRecordBackListener();
+        console.log('녹음 파일 경로:', result);
+        setAudioUri(result);
+        const fileExists = await RNFetchBlob.fs.exists(result.replace('file://',''));
+        console.log('녹음 파일 존재 여부 확인:', fileExists);
       } else {
-        if (timer === 0) {
-          setTimer(3);
-          setPostBtnDisabled(true);
-        }
-        const result = await audioRecorderPlayer.startRecorder();
-        console.log('녹음 시작:', result);
+        const filePath = `${RNFetchBlob.fs.dirs.DocumentDir}/${userData.userUuid}.mp3`
+        const result = await audioRecorderPlayer.startRecorder(filePath);
+        console.log('녹음 시작 경로:', result);
         setAudioUri(result);
         audioRecorderPlayer.addRecordBackListener(e => {
           console.log(e);
