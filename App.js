@@ -3,8 +3,8 @@ import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RecordingProvider} from './src/services/RecordingContext.js';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-import firebase from '@react-native-firebase/app';
+import firebaseMessaging from './src/services/firebaseMessaging.js';
+import auth from '@react-native-firebase/auth';
 import uuid from 'react-native-uuid';
 
 // 회원가입
@@ -41,30 +41,39 @@ const Stack = createStackNavigator();
 
 const AppContent = () => {
   const {userData, setUserData} = useUser();
+  const [initialRoute, setInitialRoute] = useState('Splash');
 
   useEffect(() => {
-    const generatedUuid = uuid.v4();
-    setUserData(prevState => ({
-      ...prevState,
-      userUuid: generatedUuid,
-    }));
+    const initializeApp = async () => {
+      // Topic 구독
+      firebaseMessaging.subscribeToTopic('global_notifications');
 
-    const checkAuthStatus = async () => {
-      onAuthStateChanged(auth, user => {
-        if (user) {
-          setInitialRoute('MainScreen');
-        } else {
-          setInitialRoute('SignUpPhoneNumber');
-        }
-      });
+      // UUID 생성
+      const generatedUuid = uuid.v4();
+      setUserData(prevState => ({
+        ...prevState,
+        userUuid: generatedUuid,
+      }));
+
+      // 인증 상태 확인
+      const checkAuthStatus = async () => {
+        onAuthStateChanged(auth(), user => {
+          if (user) {
+            setInitialRoute('MainScreen');
+          } else {
+            setInitialRoute('SignUpPhoneNumber');
+          }
+        });
+      };
+      checkAuthStatus();
     };
-    checkAuthStatus();
-  }, [setUserData]);
+    initializeApp();
+  },[setUserData])
 
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Splash"
+        initialRouteName={initialRoute}
         screenOptions={{
           headerShown: false,
         }}>
@@ -130,6 +139,7 @@ const App = () => {
 };
 
 import { AppRegistry } from 'react-native';
+import { firebase } from '@react-native-firebase/messaging';
 AppRegistry.registerComponent('realvoice', () => App);
 
 export default App;
