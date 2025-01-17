@@ -1,6 +1,9 @@
 package com.realvoice
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost
@@ -37,8 +40,27 @@ class MainApplication : Application(), ReactApplication {
     super.onCreate()
     SoLoader.init(this, OpenSourceMergedSoMapping)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      // If you opted-in for the New Architecture, we load the native entry point for this app.
+      // If you opted-in for the New Architectuxqre, we load the native entry point for this app.
       load()
+    }
+
+    // 알림 채널 생성
+    createNotificationChannel()
+  }
+
+  private fun createNotificationChannel() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      val channelId = "default_channel"
+      val channelName = "Default Notifications"
+      val channelDescription = "This is the default channel for notification."
+      val importance = NotificationManager.IMPORTANCE_HIGH
+
+      val channel = NotificationChannel(channelId, channelName, importance).apply {
+        description = channelDescription
+      }
+
+      val manager = getSystemService(NotificationManager::class.java)
+      manager?.createNotificationChannel(channel)
     }
   }
 }

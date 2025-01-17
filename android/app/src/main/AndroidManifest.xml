@@ -19,6 +19,7 @@
       android:theme="@style/AppTheme"
       android:supportsRtl="true">
 
+      <!-- Firebase ComponentDiscoveryService -->
       <service
         android:name="com.google.firebase.components.ComponentDiscoveryService"
         android:exported="false">
@@ -27,14 +28,30 @@
           android:value="com.google.firebase.components.ComponentRegistrar" />
       </service>
 
-      <!-- 알림 아이콘 -->
-      <!-- <meta-data
+      <!-- Firbase Messaging Service -->
+      <service
+        android:name=".java.MyFirebaseMessagingService"
+        android:exported="false">
+        <intent-filter>
+          <action android:name="com.google.firebase.MESSAGING_EVENT" />
+        </intent-filter>
+      </service>
+
+      <!-- 알림 아이콘 및 색상 -->
+      <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@drawable/ic_notification" />
+        android:resource="@drawable/ic_stat_ic_notification"
+        tools:replace="android:resource" />
       <meta-data
         android:name="com.google.firebase.messaging.default_notification_color"
         android:resource="@color/colorAccent"
-        tools:replace="android:resource" /> -->
+        tools:replace="android:resource" />
+
+      <!-- 알림 채널 -->
+      <meta-data
+        android:name="com.google.firebase.messaging.default_notification_channel_id"
+        android:value="@string/default_notification_channel_id" 
+        tools:replace="android:value" />
 
       <activity
         android:name=".MainActivity"
