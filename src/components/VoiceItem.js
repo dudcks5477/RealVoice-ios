@@ -22,6 +22,7 @@ const VoiceItem = ({firstLetter, userName, audioUri, handleUserProfile}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [playingId, setPlayingId] = useState(null);
+  const [playingSound, setPlayingSound] = useState(null);
 
   const users = [];
 
@@ -78,7 +79,10 @@ const VoiceItem = ({firstLetter, userName, audioUri, handleUserProfile}) => {
           console.error('Sound 재생 실패');
         }
         sound.release();
+        setIsPlaying(false);
+        setPlayingId(null);
       });
+      setPlayingSound(sound);
     });
   };
 
@@ -94,6 +98,12 @@ const VoiceItem = ({firstLetter, userName, audioUri, handleUserProfile}) => {
   const togglePlayPause = () => {
     if (isPlaying) {
       console.log('재생 중단 로직 실행')
+      if (playingSound) {
+        playingSound.stop(() => {
+          playingSound.release();
+          setPlayingSound(null);
+        })
+      }
       setIsPlaying(false);
       setPlayingId(null);
     } else {
