@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {View, Text, TouchableOpacity, Alert, Linking, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {UserContext} from '../../contexts/UserContext';
@@ -8,11 +8,40 @@ import {requestNotificationPermission, requestAudioPermission} from '../../utils
 import PermissionsAndroid from 'react-native/Libraries/PermissionsAndroid/PermissionsAndroid'; // Android 권한 추가
 import axios from 'axios'; // axios import
 import {API_URL} from '@env'; // API_URL import
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const requestStoragePermission = async () => {
+  if (Platform.OS === 'android') {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: 'Storage Permission',
+          message: 'This app needs access to your storage to play audio',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cacnel',
+          buttonPositive: 'OK',
+        }
+      );
+      if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+        console.error('Storage permission denied');
+      } else {
+        console.log('Storage permission granted');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+};
 
 const VoicePermissionScreen = () => {
   const [isAllowPressed, setIsAllowPressed] = useState(false);
   const navigation = useNavigation();
   const {userData} = useContext(UserContext);
+
+  useEffect(() => {
+    requestStoragePermission();
+  }, []);
 
   const handleAllow = async () => {
     setIsAllowPressed(true);
@@ -70,6 +99,12 @@ const VoicePermissionScreen = () => {
             createTime: userData.createTime,
           });
 
+          // AsyncStorage에 회원가입 상태 저장
+          await AsyncStorage.setItem('isRegistered', 'true');
+          await AsyncStorage.setItem('userUuid', userData.userUuid);
+          console.log('회원가입 상태가 저장되었습니다.')
+          console.log('userUuid가 저장되었습니다:', userData.userUuid);
+
           console.log('유저 데이터가 성공적으로 저장되었습니다:', response.data);
 
           navigation.navigate('Main');
@@ -107,6 +142,12 @@ const VoicePermissionScreen = () => {
           joinYear: userData.joinYear,
           createTime: createTime,
         });
+
+        // AsyncStorage에 회원가입 상태 저장
+        await AsyncStorage.setItem('isRegistered', 'true');
+        await AsyncStorage.setItem('userUuid', userData.userUuid);
+        console.log('회원가입 상태가 저장되었습니다.')
+        console.log('userUuid가 저장되었습니다:', userData.userUuid);
 
         console.log('유저 데이터가 성공적으로 저장되었습니다:', response.data);
         navigation.navigate('Main');
