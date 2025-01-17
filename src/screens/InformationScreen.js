@@ -24,7 +24,7 @@ const InformationScreen = () => {
           onPress={handleEditProfile}>
           <View style={profileScreenStyle.headerBack}>
             <Icon name="arrow-back" style={profileScreenStyle.icon} />
-            <Text style={profileScreenStyle.headerText}>도움받기</Text>
+            <Text style={profileScreenStyle.headerText}>정보</Text>
           </View>
         </TouchableOpacity>
       </View>
