@@ -10,37 +10,58 @@ import axios from 'axios'; // axios import
 import {API_URL} from '@env'; // API_URL import
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const requestStoragePermission = async () => {
-  if (Platform.OS === 'android') {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: 'Storage Permission',
-          message: 'This app needs access to your storage to play audio',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cacnel',
-          buttonPositive: 'OK',
-        }
-      );
-      if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-        console.error('Storage permission denied');
-      } else {
-        console.log('Storage permission granted');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
-};
-
 const VoicePermissionScreen = () => {
   const [isAllowPressed, setIsAllowPressed] = useState(false);
   const navigation = useNavigation();
   const {userData} = useContext(UserContext);
 
   useEffect(() => {
-    requestStoragePermission();
+    // 권한 요청 함수
+    const requestPermissions = async () => {
+      if (Platform.OS === 'android') {
+        try {
+          // 스토리지 권한 요청
+          const storageGranted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            {
+              title: '저장공간 권한 요청',
+              message: 'RealVoice에서 녹음 재생을 위해 저장공간을 허용하시겠습니까?',
+              buttonPositive: '허용하기',
+              buttonNegative: '허용하지 않기',
+            },
+          );
+
+          if (storageGranted !== PermissionsAndroid.RESULTS.GRANTED) {
+            console.error('Storage permission denied');
+          }
+
+          // 알림 권한 요청
+          const notificationGranted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+            {
+              title: '알림 권한 요청',
+              message: 'RealVoice에서 알림을 표시하도록 허용하시겠습니까?',
+              buttonPositive: '허용하기',
+              buttonNegative: '허용하지 않기',
+            },
+          );
+
+          if (notificationGranted !== PermissionsAndroid.RESULTS.GRANTED) {
+            Alert.alert(
+              '알림 권한이 허용됨',
+              '알림 권한이 허용되었습니다. 알림 권환을 활성화하지 않으면 RealVoice를 사용할 수 없습니다.',
+              [
+                {text: '닫기', style: 'cancel'},
+              ],
+            );
+          }
+        } catch (err) {
+          console.warn('권한 요청 중 에러 발생:', err);
+        }
+      }
+    };
+
+    requestPermissions();
   }, []);
 
   const handleAllow = async () => {
@@ -48,31 +69,6 @@ const VoicePermissionScreen = () => {
 
     if (Platform.OS === 'android') {
       try {
-        // Android에서 알림 권한 요청
-        // const notificationGranted = await PermissionsAndroid.request(
-        //   PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-        //   {
-        //     title: '알림 권한 요청',
-        //     message: 'RealVoice에서 알림을 표시하도록 허용하시겠습니까?',
-        //     buttonPositive: '허용하기',
-        //     buttonNegative: '허용하지 않기',
-        //   },
-        // );
-        
-        // if (notificationGranted === PermissionsAndroid.RESULTS.GRANTED) {
-        //   console.log('알림 권한이 허용되었습니다.');
-        // } else {
-        //   console.log('알림 권한이 거부되었습니다.');
-        //   Alert.alert(
-        //     '알림 권한 거부됨',
-        //     '알림 권한이 거부되었습니다. 설정에서 알림 권한을 활성화해야 RealVoice의 모든 기능을 사용할 수 있습니다.',
-        //     [
-        //       {text: '취소', style: 'cancel'},
-        //       {text: '설정으로 이동', onPress: () => Linking.openSettings()},
-        //     ],
-        //   );
-        // }
-
         // Android에서 녹음 권한 요청
         const audioGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
