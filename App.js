@@ -1,10 +1,12 @@
 import 'react-native-get-random-values';
 import React, {useEffect, useState} from 'react';
+import {Alert} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RecordingProvider} from './src/services/RecordingContext.js';
-import firebaseMessaging from './src/services/firebaseMessaging.js';
-import auth from '@react-native-firebase/auth';
+import {initializeFCM, cleanupFCM, subscribeToTopic} from './src/services/firebaseMessaging.js'
+import auth, { onAuthStateChanged } from '@react-native-firebase/auth';
 import uuid from 'react-native-uuid';
 
 // 회원가입
@@ -45,30 +47,19 @@ const AppContent = () => {
 
   useEffect(() => {
     const initializeApp = async () => {
-      // Topic 구독
-      firebaseMessaging.subscribeToTopic('global_notifications');
-
-      // UUID 생성
+      await subscribeToTopic('global_notifications');
       const generatedUuid = uuid.v4();
-      setUserData(prevState => ({
-        ...prevState,
-        userUuid: generatedUuid,
-      }));
-
-      // 인증 상태 확인
-      const checkAuthStatus = async () => {
-        onAuthStateChanged(auth(), user => {
-          if (user) {
-            setInitialRoute('MainScreen');
-          } else {
-            setInitialRoute('SignUpPhoneNumber');
-          }
-        });
-      };
-      checkAuthStatus();
+      setUserData((prevState) => ({...prevState, userUuid: generatedUuid}));
+      onAuthStateChanged(auth(), (user) => {
+        setInitialRoute(user ? 'MainScreen' : 'SignUpPhoneNumber');
+      });
     };
+
+    initializeFCM();
     initializeApp();
-  },[setUserData])
+
+    return cleanupFCM();
+  }, [setUserData]);
 
   return (
     <NavigationContainer>
@@ -139,7 +130,6 @@ const App = () => {
 };
 
 import { AppRegistry } from 'react-native';
-import { firebase } from '@react-native-firebase/messaging';
 AppRegistry.registerComponent('realvoice', () => App);
 
 export default App;
