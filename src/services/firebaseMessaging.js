@@ -1,5 +1,5 @@
 import messaging from '@react-native-firebase/messaging';
-import {Alert} from 'react-native';
+import { Alert } from 'react-native';
 
 /**
  * 포그라운드 알림 처리
@@ -37,7 +37,6 @@ export const handleBackgroundNotification = () => {
  * 앱 종료 상태에서 알림 클릭 시 처리
  */
 export const handleQuitStateNotification = async () => {
-    console.log("Checking initial notification...");
     const remoteMessage = await messaging().getInitialNotification();
     if (remoteMessage) {
         console.log('Notification caused app to open from quit state:', remoteMessage);
@@ -50,23 +49,34 @@ export const handleQuitStateNotification = async () => {
 /**
  * FCM 초기화 및 알림 핸들러 설정
  */
-export const initializeFCM = async () => {
+export const initializeFCM = async (setUserData) => {
+    console.log('initializeFCM started');
+
     handleForegroundMessage();
     handleBackgroundNotification();
     handleQuitStateNotification();
 
-    // FCM 토큰 가져오기
     try {
+        console.log('Attempting to fetch FCM Token...');
         const token = await messaging().getToken();
         console.log('Your FCM Token:', token);
+
+        if (token) {
+            setUserData((prevState) => ({...prevState, fcmToken: token }));
+        } else {
+            console.error('FCM Token is null or undefined');
+        }
     } catch (error) {
         console.error('Failed to fetch FCM Token:', error);
     }
 };
 
+    
+
 // 토픽 구독
 export const subscribeToTopic = async (topic) => {
     try {
+        console.log(`Attemping to subscribe to topic: ${topic}`)
         await messaging().subscribeToTopic(topic);
         console.log(`Successfully subscribed to topic: ${topic}`);
     } catch (error) {
