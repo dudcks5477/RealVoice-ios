@@ -83,17 +83,26 @@ const VoicePermissionScreen = () => {
         if (audioGranted === PermissionsAndroid.RESULTS.GRANTED) {
           console.log('녹음 권한이 허용되었습니다.');
 
-          const response = await axios.post(`${API_URL}/user/voice/register`, {
-            userUuid: userData.userUuid,
-            callingCode: userData.callingCode,
-            phoneNumber: userData.phoneNumber,
-            nickName: userData.nickName,
-            realName: userData.realName,
-            countryName: userData.countryName,
-            bio: userData.bio,
-            joinYear: userData.joinYear,
-            createTime: userData.createTime,
-          });
+            const response = await axios.post(`${API_URL}/user/voice/register`, {
+              userUuid: userData.userUuid,
+              callingCode: userData.callingCode,
+              phoneNumber: userData.phoneNumber,
+              nickName: userData.nickName,
+              realName: userData.realName,
+              countryName: userData.countryName,
+              bio: userData.bio,
+              joinYear: userData.joinYear,
+              createTime: userData.createTime,
+              fcmToken: userData.fcmToken,
+            });            
+
+            console.log('Voice register response:', response.data);
+        
+            // const firebaseResponse = await axios.post(`${API_URL}/firebase/send`, {
+            //   userUuid: userData.userUuid,
+            // })
+
+            // console.log('firebase/send 성공:', firebaseResponse.data);
 
           // AsyncStorage에 회원가입 상태 저장
           await AsyncStorage.setItem('isRegistered', 'true');
@@ -137,6 +146,7 @@ const VoicePermissionScreen = () => {
           bio: userData.bio,
           joinYear: userData.joinYear,
           createTime: createTime,
+          fcmToken: userData.fcmToken,
         });
 
         // AsyncStorage에 회원가입 상태 저장
