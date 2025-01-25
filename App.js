@@ -46,20 +46,23 @@ const AppContent = () => {
   const [initialRoute, setInitialRoute] = useState('Splash');
 
   useEffect(() => {
+    console.log('useEffect executed');
     const initializeApp = async () => {
-      await subscribeToTopic('global_notifications');
+      console.log('initializeApp executed');
+      // await subscribeToTopic('global_notifications');
       const generatedUuid = uuid.v4();
+      console.log('Generated UUID:', generatedUuid);
       setUserData((prevState) => ({...prevState, userUuid: generatedUuid}));
       onAuthStateChanged(auth(), (user) => {
         setInitialRoute(user ? 'MainScreen' : 'SignUpPhoneNumber');
       });
     };
 
-    initializeFCM();
+    initializeFCM(setUserData);
     initializeApp();
 
     return cleanupFCM();
-  }, [setUserData]);
+  }, []);
 
   return (
     <NavigationContainer>
@@ -130,6 +133,7 @@ const App = () => {
 };
 
 import { AppRegistry } from 'react-native';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry.js';
 AppRegistry.registerComponent('realvoice', () => App);
 
 export default App;
