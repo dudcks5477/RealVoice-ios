@@ -17,6 +17,7 @@ export const UserProvider = ({children}) => {
     countryName: 'KOREA',
     joinYear: '2024',
     createTime: new Date().toISOString(),
+    fcmToken: '',
   });
 
   const setUser = newUserData => {
